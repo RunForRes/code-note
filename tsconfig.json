@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "baseUrl": "src",
+      "paths": {
+        "@types/*": ["types/*"],
+        "@content/*": ["content/*"],
+        "@background/*": ["background/*"],
+        "@popup/*": ["popup/*"]
+      },
+    }
+  }
