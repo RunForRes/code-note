@@ -1,8 +1,8 @@
 // 定义题目难度枚举
 enum DifficultyLevel {
-    EASY = 'Easy',
-    MEDIUM = 'Medium',
-    HARD = 'Hard'
+    EASY = '简单',
+    MEDIUM = '中等',
+    HARD = '困难'
 }
 
 // 定义代码部分的接口
@@ -30,5 +30,4 @@ interface LeetCodeNote {
     
     // 元数据
     createDate: string;         // 创建时间
-    updateDate: string;         // 更新时间
 }

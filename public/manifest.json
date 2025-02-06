@@ -32,6 +32,7 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "permissions": ["activeTab", "scripting", "tabs"],
+  "permissions": ["activeTab", "scripting", "tabs", "storage", "webNavigation"],
   "host_permissions": ["<all_urls>"]
+  
 }

@@ -7,8 +7,36 @@
 <body>
     <div class="container">
         <h2>LeetCode 笔记提取器</h2>
-        <button id="extractBtn">提取题目信息</button>
-        <div id="result"></div>
+        
+        <!-- Notion 配置部分 -->
+        <div class="config-section">
+            <h3>Notion 配置</h3>
+            <form id="settingsForm">
+                <div class="form-group">
+                    <label for="apiKey">API Key:</label>
+                    <input type="password" id="apiKey" required>
+                </div>
+                <div class="form-group">
+                    <label for="pageId">Page ID:</label>
+                    <input type="text" id="pageId" placeholder="Notion 页面 ID">
+                </div>
+                <div class="form-group">
+                    <label for="databaseId">Database ID:</label>
+                    <input type="text" id="databaseId" placeholder="Notion 数据库 ID">
+                </div>
+                <div class="button-group">
+                    <button type="submit">保存配置</button>
+                    <button type="button" id="createDbBtn">创建数据库</button>
+                </div>
+            </form>
+            <div id="configMessage" class="message"></div>
+        </div>
+
+        <!-- 原有的提取功能部分 -->
+        <div class="extract-section">
+            <button id="extractBtn">提取题目信息</button>
+            <div id="result"></div>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>

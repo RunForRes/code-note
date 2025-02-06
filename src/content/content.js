@@ -1,42 +1,3 @@
-(function initContentScript() {
-    // 立即添加调试标记
-    try {
-        console.log('Content Script 初始化开始');
-        
-        // 确保 body 存在
-        if (document.body) {
-            document.body.appendChild(debugDiv);
-        } else {
-            // 如果 body 还不存在，等待 DOM 加载
-            document.addEventListener('DOMContentLoaded', () => {
-                document.body.appendChild(debugDiv);
-            });
-        }
-        
-        console.log('Content Script 初始化完成');
-    } catch (error) {
-        console.error('Content Script 初始化失败:', error);
-    }
-})();
-
-// 使用 window.onload 确保在页面加载完成后执行
-window.onload = () => {
-    console.log('Content script loaded via window.onload!');
-    // 测试 DOM 是否可访问
-    const title = document.querySelector('div[data-cy="question-title"]');
-    console.log('Found title element:', title);
-};
-
-// 使用 MutationObserver 监听 DOM 变化
-const observer = new MutationObserver((mutations) => {
-    console.log('DOM changed:', mutations);
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
 // 提取代码部分
 function extractCodeSections() {
     try {
@@ -67,7 +28,7 @@ function extractCodeSections() {
 }
 
 // 主要提取函数
-function extractLeetCodeInfo() {
+async function extractLeetCodeInfo() {
     console.log('Extracting basic information...');
     try {
         // 基本信息提取
@@ -91,7 +52,6 @@ function extractLeetCodeInfo() {
             codes: extractCodeSections(),
             notes: '', // 初始为空，可以后续在 Notion 中补充
             createDate: new Date().toISOString(),
-            updateDate: new Date().toISOString()
         };
 
         return leetCodeNote;
@@ -101,23 +61,25 @@ function extractLeetCodeInfo() {
     }
 }
 
-// 验证数据完整性
-function validateLeetCodeNote(note) {
-    const requiredFields = ['title', 'level', 'description', 'url'];
-    return requiredFields.every(field => Boolean(note[field]));
-}
-
-// 监听消息
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {    
-    if (request.action === 'extractInfo') {
-        try {
-            const info = extractLeetCodeInfo();
-            console.log('Extracted info:', info);
-            sendResponse(info);
-        } catch (error) {
-            console.error('Extraction error:', error);
-            sendResponse({ error: error.message });
+// 修改消息监听部分
+if (chrome && chrome.runtime && chrome.runtime.onMessage) {
+    // 监听消息
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {    
+        if (request.action === 'extractInfo') {
+            // 使用异步 IIFE 来处理异步函数
+            (async () => {
+                try {
+                    const info = await extractLeetCodeInfo();
+                    console.log('Extracted info:', info);
+                    sendResponse(info);
+                } catch (error) {
+                    console.error('Extraction error:', error);
+                    sendResponse({ error: error.message });
+                }
+            })();
+            return true; // 保持消息通道开放
         }
-    }
-    return true;
-});
+    });
+} else {
+    console.error('Chrome runtime API not available');
+}
