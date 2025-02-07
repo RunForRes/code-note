@@ -52,7 +52,10 @@ export class NotionService {
                                 ...database.properties.Tags.multi_select.options,
                                 ...tagsToAdd.map(tag => ({
                                     name: tag,
-                                    color: "default" // 可以随机分配颜色
+                                    color: (() => {
+                                        const colors = ["default", "blue", "brown", "orange", "yellow", "green", "red", "purple", "pink", "gray"];
+                                        return colors[Math.floor(Math.random() * colors.length)];
+                                    })()
                                 }))
                             ]
                         }
@@ -114,13 +117,7 @@ export class NotionService {
                     },
                     // 题目描述
                     "Description": {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: leetCodeInfo.description || ""
-                                }
-                            }
-                        ]
+                        rich_text: leetCodeInfo.descriptionRichText
                     },
                     // 代码 (如果超出长度限制，可能需要放在 children 中)
                     "Codes": {
@@ -128,6 +125,13 @@ export class NotionService {
                             {
                                 text: {
                                     content: leetCodeInfo.codes || ""
+                                },
+                                annotations: {
+                                    bold: false,
+                                    italic: false,
+                                    strikethrough: false,
+                                    underline: false,
+                                    code: true
                                 }
                             }
                         ]

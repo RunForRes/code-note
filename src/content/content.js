@@ -1,3 +1,7 @@
+// 在文件顶部添加以下导入语句
+import TurndownService from 'turndown';
+import { markdownToRichText } from '@tryfabric/martian';
+
 // 提取代码部分
 function extractCodeSections() {
     try {
@@ -34,7 +38,11 @@ async function extractLeetCodeInfo() {
         // 基本信息提取
         const title = document.querySelector('.text-title-large a[href^="/problems/"]')?.textContent?.trim();
         const difficulty = document.querySelector('div[class*="text-difficulty-"]')?.textContent?.trim();
-        const description = document.querySelector('div[data-track-load="description_content"]')?.textContent?.trim();
+        // 原先直接获取 innerHTML 转换为富文本，现在先转换为 Markdown，再转换为 Notion 富文本
+        const rawDescriptionHTML = document.querySelector('div[data-track-load="description_content"]')?.innerHTML?.trim();
+        const turndownService = new TurndownService();
+        const descriptionMarkdown = turndownService.turndown(rawDescriptionHTML || "");
+        const descriptionRichText = markdownToRichText(descriptionMarkdown);
         const url = window.location.href;
         
         // 标签提取
@@ -47,7 +55,7 @@ async function extractLeetCodeInfo() {
             title,
             level: difficulty,
             url,
-            description,
+            description: descriptionRichText,
             tags,
             codes: extractCodeSections(),
             notes: '', // 初始为空，可以后续在 Notion 中补充
