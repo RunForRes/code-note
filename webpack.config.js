@@ -71,6 +71,10 @@ module.exports = (env, argv) => {
         },
         resolve: {
             extensions: ['.ts', '.js'],
+            fallback: {
+                url: require.resolve('url/'),
+                path: require.resolve('path-browserify')
+            }
         },
         plugins: [
             new CopyPlugin({

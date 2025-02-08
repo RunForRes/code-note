@@ -85,23 +85,20 @@ export class NotionService {
                 properties: {
                     // 标题
                     "Title": {
-                        title: [
-                            {
-                                text: {
-                                    content: leetCodeInfo.title
+                        title:[{
+                            text: {
+                                content: leetCodeInfo.title,
+                                link: {
+                                    url: leetCodeInfo.url
                                 }
-                            }
-                        ]
+                            },
+                        }]
                     },
                     // 难度级别
                     "Level": {
                         select: {
                             name: leetCodeInfo.level || "中等" // 默认值
                         }
-                    },
-                    // 题目链接
-                    "URL": {
-                        url: leetCodeInfo.url || ""
                     },
                     // 标签
                     "Tags": {
@@ -117,7 +114,7 @@ export class NotionService {
                     },
                     // 题目描述
                     "Description": {
-                        rich_text: leetCodeInfo.descriptionRichText
+                        rich_text: leetCodeInfo.description || []
                     },
                     // 代码 (如果超出长度限制，可能需要放在 children 中)
                     "Codes": {
@@ -182,7 +179,9 @@ export class NotionService {
                 properties: {
                     // 标题
                     Title: {
-                        title: {}
+                        title: [{
+                            type: "rich_text",
+                        }]
                     },
                     // 难度级别
                     Level: {
@@ -202,10 +201,6 @@ export class NotionService {
                                 }
                             ]
                         }
-                    },
-                    // 题目链接
-                    URL: {
-                        url: {}
                     },
                     // 标签
                     Tags: {
