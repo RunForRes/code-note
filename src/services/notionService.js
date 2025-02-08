@@ -97,7 +97,7 @@ export class NotionService {
                     // 难度级别
                     "Level": {
                         select: {
-                            name: leetCodeInfo.level || "中等" // 默认值
+                            name: leetCodeInfo.level || "中等"
                         }
                     },
                     // 标签
@@ -111,42 +111,72 @@ export class NotionService {
                         date: {
                             start: new Date().toISOString()
                         }
-                    },
-                    // 题目描述
-                    "Description": {
-                        rich_text: leetCodeInfo.description || []
-                    },
-                    // 代码 (如果超出长度限制，可能需要放在 children 中)
-                    "Codes": {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: leetCodeInfo.codes || ""
-                                },
-                                annotations: {
-                                    bold: false,
-                                    italic: false,
-                                    strikethrough: false,
-                                    underline: false,
-                                    code: true
-                                }
-                            }
-                        ]
-                    },
-                    // 笔记 (预留空白)
-                    "Notes": {
-                        rich_text: [
-                            {
-                                text: {
-                                    content: ""
-                                }
-                            }
-                        ]
                     }
                 },
+                // 将完整的内容组织在页面中
+                children: [
+                    // Description 标题
+                    {
+                        object: 'block',
+                        type: 'heading_1',
+                        heading_1: {
+                            rich_text: [{
+                                text: {
+                                    content: "Description"
+                                }
+                            }],
+                        }
+                    },
+                    // 题目描述内容
+                    ...leetCodeInfo.description,
+                    // Code 标题
+                    {
+                        object: 'block',
+                        type: 'heading_1',
+                        heading_1: {
+                            rich_text: [{
+                                text: {
+                                    content: "Code"
+                                }
+                            }],
+                        }
+                    },
+                    // 代码内容
+                    {
+                        object: 'block',
+                        type: 'code',
+                        code: {
+                            rich_text: [{
+                                text: {
+                                    content: leetCodeInfo.codes || ""
+                                }
+                            }],
+                            language: 'javascript'  // 可以根据实际语言修改
+                        }
+                    },
+                    // Note 标题
+                    {
+                        object: 'block',
+                        type: 'heading_1',
+                        heading_1: {
+                            rich_text: [{
+                                text: {
+                                    content: "Note"
+                                }
+                            }],
+                        }
+                    },
+                    // 笔记内容（预留空白段落）
+                    {
+                        object: 'block',
+                        type: 'paragraph',
+                        paragraph: {
+                            rich_text: []
+                        }
+                    }
+                ]
             });
             
-            console.log('Successfully created Notion page:', response);
             return response;
         } catch (error) {
             console.error('Error creating Notion page:', error);
@@ -226,18 +256,6 @@ export class NotionService {
                     Date: {
                         date: {}
                     },
-                    // 题目描述
-                    Description: {
-                        rich_text: {}
-                    },
-                    // 代码
-                    Codes: {
-                        rich_text: {}
-                    },
-                    // 笔记
-                    Notes: {
-                        rich_text: {}
-                    }
                 }
             });
             
